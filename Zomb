@@ -28,11 +28,11 @@ int change_x_pos()
 {
 	if (x < zombX)
 		zombX -= 1;
-	if (x > zombX)
+	else if (x > zombX)
 		zombX += 1;
 	if (x < zomb2X)
 		zomb2X -= 1;
-	if (x > zomb2X)
+	else if (x > zomb2X)
 		zomb2X +=1;
 	return 0;
 }
@@ -41,11 +41,11 @@ int change_y_pos()
 {
 	if (y < zombY)
 		zombY -= 1;
-	if (y > zombY)
+	else if (y > zombY)
 		zombY += 1;
 	if (y < zomb2Y)
 		zombY -= 1;
-	if (y > zomb2Y)
+	else if (y > zomb2Y)
 		zomb2Y +=1;
 	return 0;
 }
