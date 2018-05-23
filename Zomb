@@ -8,7 +8,7 @@ bool gameOver;
 int x, y;
 const int width = 60;
 const int height = 20;
-int zombX, zombY;
+int zombX, zombY, zomb2X, zomb2Y;
 enum eDirection {STOP = 0, LEFT, RIGHT, UP, DOWN};
 static int counter = 0;
 eDirection dir;
@@ -21,28 +21,33 @@ void Setup()
 	y = height / 2;
 	zombX = rand() % width;
 	zombY = rand() % height;
-
+	zomb2X = rand() % width;
+	zomb2Y = rand() % height;
 }
 int change_x_pos()
 {
 	if (x < zombX)
-	{
-		zombX -= 2;
-		return 0;
-		zombX += 2;
-		return 0;
-	}
+		zombX -= 1;
+	if (x > zombX)
+		zombX += 1;
+	if (x < zomb2X)
+		zomb2X -= 1;
+	if (x > zomb2X)
+		zomb2X +=1;
+	return 0;
 }
 
 int change_y_pos()
 {
 	if (y < zombY)
-	{
-		zombY -= 2;
-		return 0;
-		zombY += 2;
-		return 0;
-	}
+		zombY -= 1;
+	if (y > zombY)
+		zombY += 1;
+	if (y < zomb2Y)
+		zombY -= 1;
+	if (y > zomb2Y)
+		zomb2Y +=1;
+	return 0;
 }
 
 void Draw()
@@ -61,6 +66,8 @@ void Draw()
 			if (i == y && j == x)
 				cout << "I";
 			else if (i == zombY && j == zombX)
+				cout << "Z";
+			else if (i == zomb2Y && j == zomb2X)
 				cout << "Z";
 			else
 			{
@@ -101,7 +108,7 @@ void Logic()
 	}
 	if (x > width || x < 0 || y > height || y < 0)
 		gameOver = true;
-	if (x == zombX && y == zombY)
+	if (x == zombX && y == zombY || x == zomb2X && y == zomb2Y)
 		gameOver = true;
 }
 
@@ -129,6 +136,11 @@ void Input()
 		}
 	}
 }
+
+class Zombies
+{
+
+};
 
 int main()
 {
