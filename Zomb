@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Windows.h>
 #include <conio.h>
+#include <vector>
 
 using namespace std;
 
@@ -9,8 +10,7 @@ int x, y;
 const int width = 60;
 const int height = 20;
 int zombX, zombY, zomb2X, zomb2Y;
-enum eDirection {STOP = 0, LEFT, RIGHT, UP, DOWN};
-static int counter = 0;
+enum eDirection { STOP = 0, LEFT, RIGHT, UP, DOWN };
 eDirection dir;
 
 void Setup()
@@ -23,31 +23,6 @@ void Setup()
 	zombY = rand() % height;
 	zomb2X = rand() % width;
 	zomb2Y = rand() % height;
-}
-int change_x_pos()
-{
-	if (x < zombX)
-		zombX -= 1;
-	else if (x > zombX)
-		zombX += 1;
-	if (x < zomb2X)
-		zomb2X -= 1;
-	else if (x > zomb2X)
-		zomb2X +=1;
-	return 0;
-}
-
-int change_y_pos()
-{
-	if (y < zombY)
-		zombY -= 1;
-	else if (y > zombY)
-		zombY += 1;
-	if (y < zomb2Y)
-		zombY -= 1;
-	else if (y > zomb2Y)
-		zomb2Y +=1;
-	return 0;
 }
 
 void Draw()
@@ -65,10 +40,6 @@ void Draw()
 				cout << "*";
 			if (i == y && j == x)
 				cout << "I";
-			else if (i == zombY && j == zombX)
-				cout << "Z";
-			else if (i == zomb2Y && j == zomb2X)
-				cout << "Z";
 			else
 			{
 				bool print = false;
@@ -108,7 +79,7 @@ void Logic()
 	}
 	if (x > width || x < 0 || y > height || y < 0)
 		gameOver = true;
-	if (x == zombX && y == zombY || x == zomb2X && y == zomb2Y)
+	if (x == zombX && y == zombY || x == zomb2X && zomb2Y)
 		gameOver = true;
 }
 
@@ -137,20 +108,78 @@ void Input()
 	}
 }
 
-class Zombies
+class Zombie
 {
+private: 
+	static int m_counter;
+	int m_x;
+	int m_y;
+public:
+	void change_x_pos()
+	{
+		if (x < zombX)
+			zombX -= 1;
+		else if (x > zombX)
+			zombX += 1;
+	}
 
+	void change_y_pos()
+	{
+		if (y < zombY)
+			zombY -= 1;
+		else if (y > zombY)
+			zombY += 1;
+	}
+	Zombie(int a, int b)
+	{
+		m_x = a;
+		m_y = b;
+	};
+
+	static bool speed()
+	{
+		return (m_counter++ % 2 == 0);
+	}
+
+	int stuff()
+	{
+		return m_x;
+	}
+
+	int stuff2()
+	{
+		return m_y;
+	}
+	
+	void action()
+	{
+		if (speed())
+			change_x_pos(); 
+		else 
+			change_y_pos();
+	}
 };
+
+int Zombie::m_counter = 0;
 
 int main()
 {
 	Setup();
+	Zombie zombie1(rand(), rand());
+	Zombie zombie2(rand(), rand());
+	Zombie zombie3(rand(), rand());
+	vector<Zombie> vec;
+	vec.emplace_back(zombie1);
+	vec.emplace_back(zombie2);
+	vec.emplace_back(zombie3);
 	while (!gameOver)
 	{
-		if (counter++ % 2 == 0) change_x_pos(); else change_y_pos();
 		Draw();
+		zombie1.action();
+		zombie2.action();
+		zombie3.action();
 		Logic();
 		Input();
 		Sleep(30);
-		}
+	}
 }
